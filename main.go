@@ -5,19 +5,8 @@ import (
 	"syscall/js"
 )
 
-// CleanupIcsCalendarTimezones Function to clean up calendar timezones from the fetched ICS content
-func CleanupIcsCalendarTimezones(this js.Value, args []js.Value) interface{} {
-	if len(args) != 1 {
-		return "Invalid number of arguments passed"
-	}
-
-	// Retrieve the content passed from JavaScript as a string
-	content := args[0].String()
-
-	// Define the timezone map
-	// Mapping List is AI generated with following source:
-	// https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones?view=windows-11
-	timezoneMap := map[string]string{
+func TimezoneMap() map[string]string {
+	return map[string]string{
 		"AUS Central Standard Time":       "Australia/Darwin",
 		"AUS Eastern Standard Time":       "Australia/Sydney",
 		"Afghanistan Standard Time":       "Asia/Kabul",
@@ -153,6 +142,21 @@ func CleanupIcsCalendarTimezones(this js.Value, args []js.Value) interface{} {
 		"Yakutsk Standard Time":           "Asia/Yakutsk",
 		"Yukon Standard Time":             "America/Whitehorse",
 	}
+}
+
+// CleanupIcsCalendarTimezones Function to clean up calendar timezones from the fetched ICS content
+func CleanupIcsCalendarTimezones(this js.Value, args []js.Value) interface{} {
+	if len(args) != 1 {
+		return "Invalid number of arguments passed"
+	}
+
+	// Retrieve the content passed from JavaScript as a string
+	content := args[0].String()
+
+	// Define the timezone map
+	// Mapping List is AI generated with following source:
+	// https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones?view=windows-11
+	timezoneMap := TimezoneMap()
 
 	// Create a regex to find the timezones
 	regexpTimezone := regexp.MustCompile(`TZID[=:](.*?)([:\n])`)
